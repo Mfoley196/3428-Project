@@ -45,6 +45,10 @@
             top: 50%;
         }
 
+        #warning {
+            text-align: center;
+        }
+
         /*Header styles */
         h1 {
             font-size: 2em;
@@ -107,24 +111,28 @@
 </div>
 
 <!--alerts modal for error handling-->
-<div class="modal" id="dialog">
+<div class="modal" id="errorModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--modal header-->
+            <div class="modal-header">
+                <h4 class="modal-title" id="errorName"></h4>
+            </div>
+            <!--modal content-->
+            <div class="modal-body">
+                <p id="errorContent"></p>
+            </div>
+            <!--modal footer-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="reloadApp">Reload</button>
+                <button type="button" class="btn btn-danger" id="exitApp">Exit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="warning">
 
 </div>
-
-<!-- Script for the countdown-->
-<script>
-    var i = 10;
-    function startTimer() {
-        var countdownTimer = setInterval(function () {
-            document.getElementById("output").innerHTML = i + " seconds remaining.";
-            i = i - 1;
-            if (i <= 0) {
-                clearInterval(countdownTimer);
-            }
-        }, 1000);
-    }
-    startTimer();
-</script>
 <script src="./js/functions.js"></script>
 <script src="./js/scripts.js"></script>
 <script src="./waypoint.js"></script>

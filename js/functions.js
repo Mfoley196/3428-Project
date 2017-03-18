@@ -10,16 +10,17 @@ var lastPos = {
 }; //last know coordinates
 var accuracy;
 var WAYPOINT_RADIUS = 60;
+var START_TIME = 10; //10 seconds
 //var map = new google.map();
 var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
 var countTime = 0;//logs app runtime
-var TIME_INTERVAL = 10;
-var distance = getDistance(currentPos, lastPos);
+var TIME_INTERVAL = 30; //30 seconds interval between location refresh
 
 /**
  * Java still lives!!! say hello to the main method
  */
 function main() {
+    testDevice();
     getCurrentLocation();
     countTime += TIME_INTERVAL;
     report();
@@ -53,6 +54,27 @@ function main() {
             initMap();
         }
     }
+
+    //alert if accuracy is beyond WAYPOINT_RADIUS
+    if (accuracy > WAYPOINT_RADIUS) {
+        var alertBox = "<div class='alert alert-warning' role='alert'>" +
+            "<b>Warning:</b> Location is within a " + Math.round(accuracy) + "m radius"
+            + "</div>";
+
+        $('#warning').html(alertBox);
+    }
+
+}
+
+function startTimer() {
+    var i = START_TIME;
+    var countdownTimer = setInterval(function () {
+        document.getElementById("output").innerHTML = i + " seconds remaining.";
+        i = i - 1;
+        if (i <= 0) {
+            clearInterval(countdownTimer);
+        }
+    }, 1000);
 }
 
 /**
@@ -69,7 +91,7 @@ function testDevice() {
             "Please enable and refresh the page");
         var error = new Error("Device is not supported or GPS feature is disabled\n" +
             "Please enable and refresh the page");
-        error.name = "connectivity";
+        error.name = "No Connectivity";
         throw error;
     }
 }
@@ -159,16 +181,36 @@ function initMap() {
 
 
 /**
+ * Accepts an error object and opens a modal on the page with the details and instructions
  *
- * @param {*} errorObject
+ * @param {*} errorObject : error object thrown by a function
  */
 function errorHandler(errorObject) {
     console.log(errorObject.message);
-    /**
-     *code to create and active modal with the error message
-     */
-    alert(errorObject.name + "\n\n" +
-        errorObject.message);
+
+
+    document.getElementById('errorName').innerHTML = errorObject.name;
+    document.getElementById('errorContent').innerHTML = errorObject.message;
+
+    $('#errorModal').modal('show');
+
+    //countdown and reload after 30 secs
+    var i = TIME_INTERVAL;
+
+    function startTimer() {
+        var countdownTimer = setInterval(function () {
+            document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
+            i = i - 1;
+            if (i <= 0) {
+                clearInterval(countdownTimer);
+            }
+        }, 1000);
+    }
+
+    startTimer();
+    setTimeout(function () {
+        window.location.reload(true);
+    }, TIME_INTERVAL * 1000);
 }
 
 
@@ -218,4 +260,11 @@ function isInRange(pos1, pos2) {
  */
 function isEqual(pos1, pos2) {
     return pos1.lat == pos2.lat && pos1.lng == pos2.lng;
+}
+
+/**
+ * Checks device for working internet connection(incomplete)
+ */
+function testConnection() {
+    var url = 'https://www.google.ca/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
 }
