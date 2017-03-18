@@ -20,7 +20,12 @@ var TIME_INTERVAL = 30; //30 seconds interval between location refresh
  * Java still lives!!! say hello to the main method
  */
 function main() {
-    testDevice();
+    try{
+        testDevice();
+    } catch (e){
+        throw e;
+    }
+
     getCurrentLocation();
     countTime += TIME_INTERVAL;
     report();
@@ -60,7 +65,7 @@ function main() {
         var alertBox = "<div class='alert alert-warning' role='alert'>" +
             "<b>Warning:</b> Location is within a " + Math.round(accuracy) + "m radius"
             + "</div>";
-
+        $('#warning').empty();
         $('#warning').html(alertBox);
     }
 
@@ -87,8 +92,6 @@ function testDevice() {
         console.log("Device GPS active and connected to a network");
     } else {
         /*Throws error on fail no GPS device available*/
-        console.log("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
         var error = new Error("Device is not supported or GPS feature is disabled\n" +
             "Please enable and refresh the page");
         error.name = "No Connectivity";
@@ -186,13 +189,27 @@ function initMap() {
  * @param {*} errorObject : error object thrown by a function
  */
 function errorHandler(errorObject) {
-    console.log(errorObject.message);
+    console.log("I got this "+ errorObject.message);
 
+    var modalObject =
+        "<div class='modal-dialog' role='document'>" +
+            "<div class='modal-content'>" +
+                "<div class='modal-header'>" +
+                    "<h4 class='modal-title' id='errorName'>" +
+                        errorObject.name + "</h4>" +
+                "</div>" +
+                "<div class='modal-body'>" +
+                    "<p id='errorContent'>" +
+                        errorObject.message +
+                    "</p>" +
+                "</div>" +
+        "<div class='modal-footer'>" +
+        "<button type='button' class='btn btn-primary' id='reloadApp'>Reload</button>" +
+        "<button type='button' class='btn btn-danger' id='exitApp'>Exit</button>" +
+        "</div> </div> </div>";
 
-    document.getElementById('errorName').innerHTML = errorObject.name;
-    document.getElementById('errorContent').innerHTML = errorObject.message;
-
-    $('#errorModal').modal('show');
+    $('#myModal').html(modalObject);
+    $('#myModal').modal('show');
 
     //countdown and reload after 30 secs
     var i = TIME_INTERVAL;

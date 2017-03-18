@@ -1,7 +1,5 @@
 $(document).ready(function () { //wait for all documents to fully load
 
-
-
     try {
         testDevice();
         getCurrentLocation();

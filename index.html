@@ -6,6 +6,7 @@
     <title>No Name Extension</title>
 
     <!--External CSS import-->
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"/>
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
@@ -15,7 +16,6 @@
     <script src="./js/bootstrap.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAdp3O-uxOmY4vd7k8EfCfcg_cLYooZhOw"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="css/style.css" type="text/css"/>
 
     <style>
         body {
@@ -79,6 +79,7 @@
 <h2 id="output"></h2>
 
 <div id="main" style="width: 100%; height: 100%">
+
     <div id="siteLoader">
         <h1>Getting things together.. Please Wait</h1>
 
@@ -111,24 +112,24 @@
 </div>
 
 <!--alerts modal for error handling-->
-<div class="modal" id="errorModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <!--modal header-->
-            <div class="modal-header">
-                <h4 class="modal-title" id="errorName"></h4>
-            </div>
-            <!--modal content-->
-            <div class="modal-body">
-                <p id="errorContent"></p>
-            </div>
-            <!--modal footer-->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="reloadApp">Reload</button>
-                <button type="button" class="btn btn-danger" id="exitApp">Exit</button>
-            </div>
-        </div>
-    </div>
+<div class="modal" id="myModal">
+    <!--<div class="modal-dialog" role="document">-->
+        <!--<div class="modal-content">-->
+            <!--&lt;!&ndash;modal header&ndash;&gt;-->
+            <!--<div class="modal-header">-->
+                <!--<h4 class="modal-title" id="errorName"></h4>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;modal content&ndash;&gt;-->
+            <!--<div class="modal-body">-->
+                <!--<p id="errorContent"></p>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;modal footer&ndash;&gt;-->
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-primary" id="reloadApp">Reload</button>-->
+                <!--<button type="button" class="btn btn-danger" id="exitApp">Exit</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 <div id="warning">
 
