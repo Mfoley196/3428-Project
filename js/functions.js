@@ -9,9 +9,11 @@ var lastPos = {
     lng: ""
 }; //last know coordinates
 var accuracy;
+var WAYPOINT_RADIUS = 60;
 //var map = new google.map();
-var siteLoader = document.getElementById("siteLoader");
-var countTime = 0;
+var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
+var countTime = 0;//logs app runtime
+var TIME_INTERVAL = 10;
 var distance = getDistance(currentPos, lastPos);
 
 /**
@@ -19,29 +21,30 @@ var distance = getDistance(currentPos, lastPos);
  */
 function main() {
     getCurrentLocation();
-    console.log(countTime + "s");
+    countTime += TIME_INTERVAL;
     report();
-    countTime += 30;
 
-    //wait two seconds before checking due to asynchronous processing
     var index = isPredefined();
     console.log("Index: " + index);
-    if (index >= 0) { //if true then current position is a waypoint
+    if (index >= 0) {
 
-        lastPos.lat = waypointsArr[index].coords.lat;
-        lastPos.lng = waypointsArr[index].coords.lng;
+        //load a page only if we've moved from a pervious waypoint to another
+        if (!isEqual(waypointsArr[index].coords, lastPos)) {
+            lastPos.lat = waypointsArr[index].coords.lat;
+            lastPos.lng = waypointsArr[index].coords.lng;
+            $(siteLoader).empty(); //remove current content of siteloader
 
-        $(siteLoader).empty(); //remove current content of siteloader
+            //create a new embed object with the location's url
+            var embed = "<object data= " + waypointsArr[index].url + " frameborder='0'" +
+                " style='overflow: hidden; height: 100%; width: 100%; position: absolute;' height='100%' width='100%'></object>";
+            //insert into the page
+            $(siteLoader).html(embed);
+        }
 
-        //create a new embed object with the location's url
-        var embed = "<object data= " + waypointsArr[index].url + " frameborder='0'" +
-            " style='overflow: hidden; height: 100%; width: 100%; position: absolute;' height='100%' width='100%'></object>";
-        //insert into the page
-        $(siteLoader).html(embed);
     } else {
 
-        //if the program is just starting (last position is unknown) or the new position is +60m from the last, update the program
-        if(Math.round(getDistance(lastPos, currentPos)) > 60){
+        //if the current location is >60m beyond the last or the first location is not defined, generate a map
+        if (!isInRange(lastPos, currentPos) || countTime == TIME_INTERVAL) {
             //update the current location to the current
             lastPos.lat = currentPos.lat;
             lastPos.lng = currentPos.lng;
@@ -49,9 +52,62 @@ function main() {
             $(siteLoader).empty();
             initMap();
         }
-
     }
+}
 
+/**
+ * Tests if the device supports GPS or if it's active and also tests for an active connection
+ * Throws noConnectivity error when coordinates cannot be found or no network connection available
+ * @returns True if the device supports
+ */
+function testDevice() {
+    if (navigator.geolocation && navigator.onLine) {
+        console.log("Device GPS active and connected to a network");
+    } else {
+        /*Throws error on fail no GPS device available*/
+        console.log("Device is not supported or GPS feature is disabled\n" +
+            "Please enable and refresh the page");
+        var error = new Error("Device is not supported or GPS feature is disabled\n" +
+            "Please enable and refresh the page");
+        error.name = "connectivity";
+        throw error;
+    }
+}
+
+/**
+ * Function creates a navigator.geolocation object and obtains the devices location using HTML5/Javascript navigator API
+ * Also reports the accuracy of the location given
+ * @returns returns the latitude and longitude positions of an object as an array
+ */
+function getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(function (data) {
+        currentPos.lat = data.coords.latitude;
+        currentPos.lng = data.coords.longitude;
+        accuracy = data.coords.accuracy;
+        //if the programming is starting for the first time, set the last position to the current
+        if (countTime < TIME_INTERVAL) {
+            lastPos.lat = data.coords.latitude;
+            lastPos.lng = data.coords.longitude;
+        }
+    });
+}
+
+/**
+ *
+ * @returns return >= 0 if current location is a waypoint, -1 otherwise
+ */
+function isPredefined() {
+    var shortestDistance = WAYPOINT_RADIUS;//if waypoints overlap, this will hold value of the closest
+    var index = -1; //set default to non of the waypoints
+
+    for (var i = 0; i < waypointsArr.length; i++) {
+        //If the current location is within range of a waypoint
+        if (isInRange(waypointsArr[i].coords, currentPos)) {
+            shortestDistance = Math.min(getDistance(waypointsArr[i].coords, currentPos), shortestDistance);
+            index = i;
+        }
+    }
+    return index;
 }
 
 /**
@@ -59,8 +115,8 @@ function main() {
  * more
  */
 function report() {
-    console.log("Current position is lat: " + currentPos.lat + " and " + " lng: " + currentPos.lng + "\n" +
-        "Last position is lat: " + lastPos.lat + " and " + " lng: " + lastPos.lng + "\n" +
+    console.log("Time: " + countTime + "s\nCurrent position is lat: " + currentPos.lat + " and " + " lng: "
+        + currentPos.lng + "\n" + "Last position is lat: " + lastPos.lat + " and " + " lng: " + lastPos.lng + "\n" +
         "Accuracy is: " + accuracy + "\n" + "Distance: " + getDistance(currentPos, lastPos)
     );
 }
@@ -101,30 +157,6 @@ function initMap() {
     }
 }
 
-/**
- * Tests if the device supports GPS or if it's active and also tests for an active connection
- * @returns True if the device supports
- */
-function testDevice() {
-    if (navigator.geolocation && navigator.onLine) {
-        console.log("Device GPS active and connected to a network");
-        navigator.geolocation.getCurrentPosition(function (data) {
-            accuracy = data.coords.accuracy;
-            currentPos.lat = data.coords.lat;
-            currentPos.lng = data.coords.lng;
-        });
-    } else {
-        /*Throws error on fail no GPS device available*/
-        console.log("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
-        var error = new Error("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
-        error.name = "connectivity";
-        errorHandler(error);
-        return false;
-    }
-
-}
 
 /**
  *
@@ -136,51 +168,9 @@ function errorHandler(errorObject) {
      *code to create and active modal with the error message
      */
     alert(errorObject.name + "\n\n" +
-    errorObject.message);
+        errorObject.message);
 }
 
-/**
- *
- * @returns return >= 0 if current location is a waypoint, -1 otherwise
- */
-function isPredefined() {
-
-    var shortestDistance = 60;//if waypoints overlap, this will hold value of the closest
-    var index = -1;
-
-
-    for (var i = 0; i < waypointsArr.length; i++) {
-
-
-        //if they are the same waypoints  stop the loop and set distance to 0
-        if (waypointsArr[i].coords.lat == currentPos.lat && waypointsArr[i].coords.lng == currentPos.lng) {
-            shortestDistance = 0;
-            index = i;
-            break;
-        }
-
-        //if the distance from waypoint is less than the shortest distance
-        if(getDistance(waypointsArr[i].coords, currentPos) <= shortestDistance){
-            shortestDistance = Math.min(getDistance(waypointsArr[i].coords, currentPos), shortestDistance);
-            index = i;
-        }
-
-    }
-
-    return index;
-}
-
-/**
- * Function creates a navigator.geolocation object and obtains the devices location using getCurrentPosition
- * @returns returns the latitude and longitude positions of an object as an array
- */
-function getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(function (data) {
-        currentPos.lat = data.coords.latitude;
-        currentPos.lng = data.coords.longitude;
-        accuracy = data.coords.accuracy;
-    });
-}
 
 /**
  Finds distance between two points, using the google geometry library
@@ -208,4 +198,24 @@ function getDistance(cPos, lPos) {
         last = new google.maps.LatLng(cPos.lat, cPos.lng);
     }
     return google.maps.geometry.spherical.computeDistanceBetween(last, cur);
+}
+
+/**
+ *
+ * @param pos1: reference point. {lat: lng: } object
+ * @param pos2: new location {lat: lng: } object
+ * @returns {boolean} true if pos2 is within 60m of pos1
+ */
+function isInRange(pos1, pos2) {
+    return Math.round(getDistance(pos1, pos2)) <= WAYPOINT_RADIUS;
+}
+
+/**
+ * Compares two coordinates to see if they are the same. Different from isInRange which checks whether the second position
+ * is within 60m of the other
+ * @param pos1
+ * @param pos2
+ */
+function isEqual(pos1, pos2) {
+    return pos1.lat == pos2.lat && pos1.lng == pos2.lng;
 }
