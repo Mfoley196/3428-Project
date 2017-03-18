@@ -1,0 +1,134 @@
+
+/* Pinwheel animation css below*/
+/* Credits to Linda Hurd for the pinwheel, this was opensource and i edited it a bit */
+.main-container {
+left:46.4%;
+top: 25%;
+  width: 100px;
+  height: 100px;
+  margin: 30px auto;
+  position: absolute;
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 1500ms;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-name: spin;
+  -moz-animation-duration: 1500ms;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
+  -ms-animation-name: spin;
+  -ms-animation-duration: 1500ms;
+  -ms-animation-iteration-count: infinite;
+  -ms-animation-timing-function: linear;
+  animation-name: spin;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@-ms-keyframes spin {
+    from { -ms-transform: rotate(0deg); }
+    to { -ms-transform: rotate(-360deg); }
+}
+@-moz-keyframes spin {
+    from { -moz-transform: rotate(0deg); }
+    to { -moz-transform: rotate(-360deg); }
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(-360deg); }
+}
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(-360deg);
+    }
+}
+
+.pin-base {
+  width: 0;
+	height: 0;
+	border-top: 0px solid transparent;
+  border-bottom: 30px solid transparent;
+  border-left: 30px solid #7a7678;
+  position: absolute;
+  left: 50px;
+  top: 20px;
+}
+#pin-2 .pin-big-triangle{
+   border-bottom: 30px solid #FF6619;
+}
+#pin-2 .pin-base{
+   border-left: 30px solid #ff935d;
+}
+#pin-3 .pin-big-triangle{
+   border-bottom: 30px solid #00B2A6;
+}
+#pin-3 .pin-base{
+   border-left: 30px solid #6dd2cb;
+}
+
+#pin-1 .pin-big-triangle{
+  border-bottom: 30px solid #14CC57;
+}
+#pin-1 .pin-base{
+   border-left: 30px solid #70cc92;
+}
+#pin-4 .pin-big-triangle{
+  border-bottom: 30px solid #808485;
+}
+#pin-4 .pin-base{
+   border-left: 30px solid #acb1b2;
+}
+
+.pin-big-triangle{
+  width: 0;
+	height: 0;
+	border-left: 30px solid transparent;
+  border-right: 39px solid transparent;
+  border-bottom: 30px solid #7a7678;
+  position: absolute;
+  left: 50px;
+  top: 20px;
+}
+
+#pin-1, #pin-2, #pin-3, #pin-4{
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+#pin-2{
+  left: 50px;
+  top: 50px;
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+}
+#pin-3{
+  top: 98px;
+  left: 2px;
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+#pin-4{
+  left: -50px;
+  top: 49px;
+  transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+}
+
+.pinwheel-center-circle{
+  background-color: #FFA40D;
+  width: 7px;
+  height: 7px;
+  -webkit-border-radius: 127px;
+  -moz-border-radius: 127px;
+  border-radius: 127px;
+  position: absolute;
+  top: 47px;
+  left: 47px;
+}
