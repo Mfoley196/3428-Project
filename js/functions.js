@@ -55,7 +55,7 @@ function main() {
             lastPos.lat = currentPos.lat;
             lastPos.lng = currentPos.lng;
             //clear the siteloader and load the new google maps object
-            $(SITE_LOADER).empty();
+            $(siteLoader).empty();
             initMap();
         }
     }
@@ -150,7 +150,7 @@ function report() {
  * create new google maps object and inserts into the page. Centered on the last known position
  */
 function initMap() {
-    $(SITE_LOADER).html("<div id='mapBox'></div>");//create map container
+    $(siteLoader).html("<div id='mapBox'></div>");//create map container
     var mapBox = document.getElementById("mapBox");
     //mapBox.setAttribute("id", "googleMap");
 
