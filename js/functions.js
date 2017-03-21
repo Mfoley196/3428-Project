@@ -1,28 +1,32 @@
 /*This file is intended primarily for the functions that the program may or may not use. It it
  * designed to allow for further extension (see what I did there) and as much code re-use as possible*/
+
+/*Globals*/
+var WAYPOINT_RADIUS = 60;//60m radius
+var START_TIME = 10; //10 seconds
+var TIME_INTERVAL = 30; //30 seconds interval between location refresh
+var countTime = 0;//logs app runtime
+var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
+var errorModal = document.getElementById("myModal");
+var alertBox = document.getElementById("alertBox");
+var accuracy;
 var currentPos = {
     lat: "",
     lng: ""
-}; //device's current location as a LatLgn object. Updates every 30secs
+};//device's current location as a LatLgn object. Updates every 30secs
 var lastPos = {
     lat: "",
     lng: ""
-}; //last know coordinates
-var accuracy;
-var WAYPOINT_RADIUS = 60;
-var START_TIME = 10; //10 seconds
-//var map = new google.map();
-var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
-var countTime = 0;//logs app runtime
-var TIME_INTERVAL = 30; //30 seconds interval between location refresh
+};//last know coordinates
+
 
 /**
  * Java still lives!!! say hello to the main method
  */
 function main() {
-    try{
+    try {
         testDevice();
-    } catch (e){
+    } catch (e) {
         throw e;
     }
 
@@ -50,7 +54,7 @@ function main() {
     } else {
 
         //if the current location is >60m beyond the last or the first location is not defined, generate a map
-        if (!isInRange(lastPos, currentPos) || countTime == TIME_INTERVAL) {
+        if (!isInRange(lastPos, currentPos) || countTime === TIME_INTERVAL) {
             //update the current location to the current
             lastPos.lat = currentPos.lat;
             lastPos.lng = currentPos.lng;
@@ -62,11 +66,7 @@ function main() {
 
     //alert if accuracy is beyond WAYPOINT_RADIUS
     if (accuracy > WAYPOINT_RADIUS) {
-        var alertBox = "<div class='alert alert-warning' role='alert'>" +
-            "<b>Warning:</b> Location is within a " + Math.round(accuracy) + "m radius"
-            + "</div>";
-        $('#warning').empty();
-        $('#warning').html(alertBox);
+        showAlert("Location is within a " + Math.round(accuracy) + "m radius");
     }
 
 }
@@ -105,15 +105,18 @@ function testDevice() {
  * @returns returns the latitude and longitude positions of an object as an array
  */
 function getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(function (data) {
-        currentPos.lat = data.coords.latitude;
-        currentPos.lng = data.coords.longitude;
-        accuracy = data.coords.accuracy;
+    navigator.geolocation.getCurrentPosition(function(posData){
+        currentPos.lat = posData.coords.latitude;
+        currentPos.lng = posData.coords.longitude;
+        accuracy = posData.coords.accuracy;
         //if the programming is starting for the first time, set the last position to the current
         if (countTime < TIME_INTERVAL) {
-            lastPos.lat = data.coords.latitude;
-            lastPos.lng = data.coords.longitude;
+            lastPos.lat = posData.coords.latitude;
+            lastPos.lng = posData.coords.longitude;
         }
+    }, function(){
+
+        errorHandler(new Error("Could not obtain coordinates. Please refresh the page", "No location data"));
     });
 }
 
@@ -189,27 +192,11 @@ function initMap() {
  * @param {*} errorObject : error object thrown by a function
  */
 function errorHandler(errorObject) {
-    console.log("I got this "+ errorObject.message);
 
-    var modalObject =
-        "<div class='modal-dialog' role='document'>" +
-            "<div class='modal-content'>" +
-                "<div class='modal-header'>" +
-                    "<h4 class='modal-title' id='errorName'>" +
-                        errorObject.name + "</h4>" +
-                "</div>" +
-                "<div class='modal-body'>" +
-                    "<p id='errorContent'>" +
-                        errorObject.message +
-                    "</p>" +
-                "</div>" +
-        "<div class='modal-footer'>" +
-        "<button type='button' class='btn btn-primary' id='reloadApp'>Reload</button>" +
-        "<button type='button' class='btn btn-danger' id='exitApp'>Exit</button>" +
-        "</div> </div> </div>";
-
-    $('#myModal').html(modalObject);
-    $('#myModal').modal('show');
+    console.log(errorObject.message);
+    document.getElementById("modalName").innerHTML = errorObject.name;
+    document.getElementById("modalMessage").innerHTML = errorObject.message;
+    $(errorModal).modal('show');
 
     //countdown and reload after 30 secs
     var i = TIME_INTERVAL;
@@ -276,7 +263,7 @@ function isInRange(pos1, pos2) {
  * @param pos2
  */
 function isEqual(pos1, pos2) {
-    return pos1.lat == pos2.lat && pos1.lng == pos2.lng;
+    return pos1.lat === pos2.lat && pos1.lng === pos2.lng;
 }
 
 /**
@@ -284,4 +271,9 @@ function isEqual(pos1, pos2) {
  */
 function testConnection() {
     var url = 'https://www.google.ca/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
+}
+
+function showAlert(message) {
+    alertHTML = '<div id="warning" class="alert alert-warning" role="alert"> <strong>Warning!</strong> ' + message + '</div>';
+    $(alertBox).html(alertHTML);
 }

@@ -1,15 +1,19 @@
 <!DOCTYPE HTML>
 
-<html>
+<html lang="en">
 
 <head>
     <title>No Name Extension</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 
     <!--External CSS import-->
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"/>
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!--External CDN script imports-->
     <script src="./js/jquery-3.1.1.min.js"></script>
@@ -18,57 +22,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <style>
-        body {
-            background-image: url(bg-5-full.jpg);
-            background-size: 100% 100%;
-        }
 
-        #siteLoader {
-            position: relative;
-            padding-bottom: 75%;
-        / / This is the aspect ratio height: 0;
-            overflow: hidden;
-        }
-
-        #mapBox {
-            border: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100% !important;
-            height: 100% !important;
-
-        }
-
-        #main-container {
-            position: absolute;
-            top: 50%;
-        }
-
-        #warning {
-            text-align: center;
-        }
-
-        /*Header styles */
-        h1 {
-            font-size: 2em;
-            font-family: arial, helvetica;
-            color: grey;
-            margin: 0;
-            position: absolute;
-            top: 20%;
-            left: 30%;
-        }
-
-        h2 {
-            font-size: 2em;
-            font-family: arial, helvetica;
-            color: grey;
-            margin: 0;
-            position: absolute;
-            top: 64%;
-            left: 37%;
-        }
 
     </style>
 
@@ -76,7 +30,7 @@
 
 <body>
 <!-- The h2 tag had to be outside of main div-->
-<h2 id="output"></h2>
+<h2 id="output" class="h1"></h2>
 
 <div id="main" style="width: 100%; height: 100%">
 
@@ -113,28 +67,30 @@
 
 <!--alerts modal for error handling-->
 <div class="modal" id="myModal">
-    <!--<div class="modal-dialog" role="document">-->
-        <!--<div class="modal-content">-->
-            <!--&lt;!&ndash;modal header&ndash;&gt;-->
-            <!--<div class="modal-header">-->
-                <!--<h4 class="modal-title" id="errorName"></h4>-->
-            <!--</div>-->
-            <!--&lt;!&ndash;modal content&ndash;&gt;-->
-            <!--<div class="modal-body">-->
-                <!--<p id="errorContent"></p>-->
-            <!--</div>-->
-            <!--&lt;!&ndash;modal footer&ndash;&gt;-->
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn btn-primary" id="reloadApp">Reload</button>-->
-                <!--<button type="button" class="btn btn-danger" id="exitApp">Exit</button>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalName">Modal title</h5>
+            </div>
+            <div class="modal-body" id="modalMessage">
+                <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="reloadApp">Refresh</button>
+                <button type="button" class="btn btn-danger" id="exitApp">Exit</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="warning">
+<div id="alertBox">
+
 
 </div>
-<script src="./js/functions.js"></script>
+
+<span class="exit">
+<i class="fa fa-times-circle fa-4x" aria-hidden="true"></i>
+</span>
+    <script src="./js/functions.js"></script>
 <script src="./js/scripts.js"></script>
 <script src="./waypoint.js"></script>
 </body>

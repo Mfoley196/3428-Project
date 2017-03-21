@@ -1,5 +1,13 @@
 /* Pinwheel animation css below*/
 /* Credits to Linda Hurd for the pinwheel, this was opensource and i edited it a bit */
+html, body {
+    /*background-image: url(./bg-5-full.jpg);*/
+    background-color: #5bc0de;
+    margin: 0;
+    padding: 0;
+    max-height: 100% ;
+    width: 100%;
+}
 
 #siteLoader {
     position: relative;
@@ -23,8 +31,64 @@
     top: 50%;
 }
 
+
+/*Header styles */
+h1 {
+    font-size: 2em;
+    font-family: arial, helvetica, sans-serif;
+    color: grey;
+    margin: 0;
+    position: absolute;
+    top: 20%;
+    left: 30%;
+}
+
+h2 {
+    font-size: 2em;
+    font-family: arial, helvetica, sans-serif;
+    color: grey;
+    margin: 0;
+    position: absolute;
+    top: 64%;
+    left: 37%;
+}
+
+
+#siteLoader {
+    position: relative;
+    padding-bottom: 75%;
+// This is the aspect ratio height: 0;
+    overflow: hidden;
+}
+
+#mapBox {
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+
+}
+
+#main-container {
+    position: absolute;
+    top: 50%;
+}
+
 #warning {
     text-align: center;
+}
+
+.exit {
+    display: flex;
+    position: relative;
+    float: right;
+    color: #00B2A6;
+}
+.exit:hover {
+    cursor: hand;
+    color: red;
 }
 
 /*Header styles */

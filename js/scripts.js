@@ -1,4 +1,12 @@
+//@grant window.close
+
 $(document).ready(function () { //wait for all documents to fully load
+    // showAlert("Everything is working for my good");
+
+    // getCurrentLocation();
+    //
+    // setTimeout(report, 10000);
+
 
     try {
         testDevice();
@@ -14,6 +22,9 @@ $(document).ready(function () { //wait for all documents to fully load
         errorHandler(e);
     }
 
+
+    /*UI event handlers*/
+
     //reload when the button is clicked
     $('#reloadApp').click(function () {
         location.reload(true);
@@ -23,7 +34,11 @@ $(document).ready(function () { //wait for all documents to fully load
     $('#exitApp').click(function () {
         window.close();
     });
-});
 
-//on start check for GPS availability
+    $('.exit').click(function () {
+
+            window.close();
+    });
+
+});
 
