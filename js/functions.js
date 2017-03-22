@@ -91,11 +91,9 @@ function testDevice() {
     if (navigator.geolocation && navigator.onLine) {
         console.log("Device GPS active and connected to a network");
     } else {
-        /*Throws error on fail no GPS device available*/
-        var error = new Error("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
-        error.name = "No Connectivity";
-        throw error;
+        /*Throws error on fail no GPS device available or no wifi*/
+        throw Error("Device is not supported or GPS/Wifi is disabled\n" +
+            "Please enable and refresh the page", "No Connectivity");
     }
 }
 
@@ -115,9 +113,8 @@ function getCurrentLocation() {
             lastPos.lng = posData.coords.longitude;
         }
     }, function(){
-
-        errorHandler(new Error("Could not obtain coordinates. Please refresh the page", "No location data"));
-    });
+        showAlert("Could not generate current coordinates");
+    }, {enableAccuracy: true});
 }
 
 /**
@@ -194,7 +191,8 @@ function initMap() {
 function errorHandler(errorObject) {
 
     console.log(errorObject.message);
-    document.getElementById("modalName").innerHTML = errorObject.name;
+    document.getElementById("modalName").innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true" style="color: red;"></i>' +
+      '  ' + errorObject.name;
     document.getElementById("modalMessage").innerHTML = errorObject.message;
     $(errorModal).modal('show');
 

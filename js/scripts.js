@@ -1,16 +1,9 @@
 //@grant window.close
 
 $(document).ready(function () { //wait for all documents to fully load
-    // showAlert("Everything is working for my good");
-
-    // getCurrentLocation();
-    //
-    // setTimeout(report, 10000);
-
 
     try {
         testDevice();
-        getCurrentLocation();
         startTimer();
         setTimeout(function () {
             main();
@@ -21,7 +14,6 @@ $(document).ready(function () { //wait for all documents to fully load
     } catch (e) {
         errorHandler(e);
     }
-
 
     /*UI event handlers*/
 
@@ -36,8 +28,11 @@ $(document).ready(function () { //wait for all documents to fully load
     });
 
     $('.exit').click(function () {
+        window.close();
+    });
 
-            window.close();
+    $('.help').click(function(){
+
     });
 
 });

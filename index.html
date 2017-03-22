@@ -10,10 +10,12 @@
 
     <!--External CSS import-->
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <!--bootstrap 4 v 4.0.0-->
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"/>
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href=""/>
 
     <!--External CDN script imports-->
     <script src="./js/jquery-3.1.1.min.js"></script>
@@ -21,47 +23,46 @@
     <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAdp3O-uxOmY4vd7k8EfCfcg_cLYooZhOw"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-    <style>
-
-
-    </style>
-
 </head>
 
 <body>
+<ul id="ui-buttons">
+    <li class="fa fa-question-circle fa-4x help" aria-hidden="true"></li>
+    <li class="fa fa-times-circle fa-4x exit" aria-hidden="true"></li>
+</ul>
 <!-- The h2 tag had to be outside of main div-->
 <h2 id="output" class="h1"></h2>
 
 <div id="main" style="width: 100%; height: 100%">
-
     <div id="siteLoader">
-        <h1>Getting things together.. Please Wait</h1>
+        <header class="text-center">
+            <h1>Getting things together... Please Wait</h1>
 
-        <!-- pinwheel in html side-->
-        <div class="main-container">
-            <div id="pinwheel-container">
-                <div id="pin-1">
-                    <div class="pin-base"></div>
-                    <div class="pin-big-triangle"></div>
-                </div>
-                <div id="pin-2">
-                    <div class="pin-base"></div>
-                    <div class="pin-big-triangle"></div>
-                </div>
-                <div id="pin-3">
-                    <div class="pin-base"></div>
-                    <div class="pin-big-triangle"></div>
-                </div>
-                <div id="pin-4">
-                    <div class="pin-base"></div>
-                    <div class="pin-big-triangle"></div>
-                </div>
-                <div class="pinwheel-center-circle">
+            <!-- pinwheel in html side-->
+            <div class="main-container">
+                <div id="pinwheel-container">
+                    <div id="pin-1">
+                        <div class="pin-base"></div>
+                        <div class="pin-big-triangle"></div>
+                    </div>
+                    <div id="pin-2">
+                        <div class="pin-base"></div>
+                        <div class="pin-big-triangle"></div>
+                    </div>
+                    <div id="pin-3">
+                        <div class="pin-base"></div>
+                        <div class="pin-big-triangle"></div>
+                    </div>
+                    <div id="pin-4">
+                        <div class="pin-base"></div>
+                        <div class="pin-big-triangle"></div>
+                    </div>
+                    <div class="pinwheel-center-circle">
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="pinwheel-stick"></div>
-
+            <div class="pinwheel-stick"></div>
+        </header>
     </div>
 </div>
 
@@ -82,15 +83,15 @@
         </div>
     </div>
 </div>
+
+
 <div id="alertBox">
 
 
 </div>
 
-<span class="exit">
-<i class="fa fa-times-circle fa-4x" aria-hidden="true"></i>
-</span>
-    <script src="./js/functions.js"></script>
+
+<script src="./js/functions.js"></script>
 <script src="./js/scripts.js"></script>
 <script src="./waypoint.js"></script>
 </body>
