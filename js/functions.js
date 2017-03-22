@@ -26,47 +26,49 @@ var lastPos = {
 function main() {
     try {
         testDevice();
+
+
+        getCurrentLocation();
+        countTime += TIME_INTERVAL;
+        report();
+
+        var index = isPredefined();
+        console.log("Index: " + index);
+        if (index >= 0) {
+
+            //load a page only if we've moved from a pervious waypoint to another   position: static;
+            if (!isEqual(waypointsArr[index].coords, lastPos)) {
+                lastPos.lat = waypointsArr[index].coords.lat;
+                lastPos.lng = waypointsArr[index].coords.lng;
+                $(siteLoader).empty(); //remove current content of siteloader
+
+                //create a new embed object with the location's url
+                var embed = "<object id='siteBox' data= " + waypointsArr[index].url + " frameborder='0'" +
+                    " style='display: block; height: auto; width: 100%;'></object>";
+                //insert into the page
+                $(siteLoader).html(embed);
+            }
+
+        } else {
+
+            //if the current location is >60m beyond the last or the first location is not defined, generate a map
+            if (!isInRange(lastPos, currentPos) || countTime === TIME_INTERVAL) {
+                //update the current location to the current
+                lastPos.lat = currentPos.lat;
+                lastPos.lng = currentPos.lng;
+                //clear the siteloader and load the new google maps object
+                $(siteLoader).empty();
+                initMap();
+            }
+        }
+
+        //alert if accuracy is beyond WAYPOINT_RADIUS
+        if (accuracy > WAYPOINT_RADIUS) {
+            showAlert("Location is within a " + Math.round(accuracy) + "m radius");
+        }
+
     } catch (e) {
         throw e;
-    }
-
-    getCurrentLocation();
-    countTime += TIME_INTERVAL;
-    report();
-
-    var index = isPredefined();
-    console.log("Index: " + index);
-    if (index >= 0) {
-
-        //load a page only if we've moved from a pervious waypoint to another   position: static;
-        if (!isEqual(waypointsArr[index].coords, lastPos)) {
-            lastPos.lat = waypointsArr[index].coords.lat;
-            lastPos.lng = waypointsArr[index].coords.lng;
-            $(siteLoader).empty(); //remove current content of siteloader
-
-            //create a new embed object with the location's url
-            var embed = "<object id='siteBox' data= " + waypointsArr[index].url + " frameborder='0'" +
-                " style='display: block; height: auto; width: 100%;'></object>";
-            //insert into the page
-            $(siteLoader).html(embed);
-        }
-
-    } else {
-
-        //if the current location is >60m beyond the last or the first location is not defined, generate a map
-        if (!isInRange(lastPos, currentPos) || countTime === TIME_INTERVAL) {
-            //update the current location to the current
-            lastPos.lat = currentPos.lat;
-            lastPos.lng = currentPos.lng;
-            //clear the siteloader and load the new google maps object
-            $(siteLoader).empty();
-            initMap();
-        }
-    }
-
-    //alert if accuracy is beyond WAYPOINT_RADIUS
-    if (accuracy > WAYPOINT_RADIUS) {
-        showAlert("Location is within a " + Math.round(accuracy) + "m radius");
     }
 
 }
@@ -118,7 +120,8 @@ function getCurrentLocation() {
         }
     }, function () {
         showAlert("Could not generate current coordinates");
-    }, {enableAccuracy: true});
+    })
+    // , {enableAccuracy: true});
 }
 
 /**
