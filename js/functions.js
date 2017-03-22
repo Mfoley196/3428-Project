@@ -38,15 +38,15 @@ function main() {
     console.log("Index: " + index);
     if (index >= 0) {
 
-        //load a page only if we've moved from a pervious waypoint to another
+        //load a page only if we've moved from a pervious waypoint to another   position: static;
         if (!isEqual(waypointsArr[index].coords, lastPos)) {
             lastPos.lat = waypointsArr[index].coords.lat;
             lastPos.lng = waypointsArr[index].coords.lng;
             $(siteLoader).empty(); //remove current content of siteloader
 
             //create a new embed object with the location's url
-            var embed = "<object data= " + waypointsArr[index].url + " frameborder='0'" +
-                " style='overflow: hidden; height: 100%; width: 100%; position: absolute;' height='100%' width='100%'></object>";
+            var embed = "<object id='siteBox' data= " + waypointsArr[index].url + " frameborder='0'" +
+                " style='display: block; height: auto; width: 100%;'></object>";
             //insert into the page
             $(siteLoader).html(embed);
         }
@@ -71,10 +71,13 @@ function main() {
 
 }
 
+/**
+ * Start page countdown timer
+ */
 function startTimer() {
     var i = START_TIME;
     var countdownTimer = setInterval(function () {
-        document.getElementById("output").innerHTML = i + " seconds remaining.";
+        document.getElementById("output").innerHTML = i + " seconds remaining";
         i = i - 1;
         if (i <= 0) {
             clearInterval(countdownTimer);
@@ -90,12 +93,11 @@ function startTimer() {
 function testDevice() {
     if (navigator.geolocation && navigator.onLine) {
         console.log("Device GPS active and connected to a network");
+        getCurrentLocation();
     } else {
-        /*Throws error on fail no GPS device available*/
-        var error = new Error("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
-        error.name = "No Connectivity";
-        throw error;
+        /*Throws error on fail no GPS device available or no wifi*/
+        throw Error("Device is not supported or GPS/Wifi is disabled\n" +
+            "Please enable and refresh the page", "No Connectivity");
     }
 }
 
@@ -105,7 +107,7 @@ function testDevice() {
  * @returns returns the latitude and longitude positions of an object as an array
  */
 function getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(function(posData){
+    navigator.geolocation.getCurrentPosition(function (posData) {
         currentPos.lat = posData.coords.latitude;
         currentPos.lng = posData.coords.longitude;
         accuracy = posData.coords.accuracy;
@@ -114,10 +116,9 @@ function getCurrentLocation() {
             lastPos.lat = posData.coords.latitude;
             lastPos.lng = posData.coords.longitude;
         }
-    }, function(){
-
-        errorHandler(new Error("Could not obtain coordinates. Please refresh the page", "No location data"));
-    });
+    }, function () {
+        showAlert("Could not generate current coordinates");
+    }, {enableAccuracy: true});
 }
 
 /**
@@ -194,7 +195,8 @@ function initMap() {
 function errorHandler(errorObject) {
 
     console.log(errorObject.message);
-    document.getElementById("modalName").innerHTML = errorObject.name;
+    document.getElementById("modalName").innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true" style="color: red;"></i>' +
+        '  ' + errorObject.name;
     document.getElementById("modalMessage").innerHTML = errorObject.message;
     $(errorModal).modal('show');
 
