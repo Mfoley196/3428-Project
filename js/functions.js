@@ -1,25 +1,35 @@
 /*This file is intended primarily for the functions that the program may or may not use. It it
  * designed to allow for further extension (see what I did there) and as much code re-use as possible*/
+
+/*Globals*/
+var WAYPOINT_RADIUS = 60;//60m radius
+var START_TIME = 10; //10 seconds
+var TIME_INTERVAL = 30; //30 seconds interval between location refresh
+var countTime = 0;//logs app runtime
+var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
+var errorModal = document.getElementById("myModal");
+var alertBox = document.getElementById("alertBox");
+var accuracy;
 var currentPos = {
     lat: "",
     lng: ""
-}; //device's current location as a LatLgn object. Updates every 30secs
+};//device's current location as a LatLgn object. Updates every 30secs
 var lastPos = {
     lat: "",
     lng: ""
-}; //last know coordinates
-var accuracy;
-var WAYPOINT_RADIUS = 60;
-//var map = new google.map();
-var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
-var countTime = 0;//logs app runtime
-var TIME_INTERVAL = 10;
-var distance = getDistance(currentPos, lastPos);
+};//last know coordinates
+
 
 /**
  * Java still lives!!! say hello to the main method
  */
 function main() {
+    try {
+        testDevice();
+    } catch (e) {
+        throw e;
+    }
+
     getCurrentLocation();
     countTime += TIME_INTERVAL;
     report();
@@ -44,7 +54,7 @@ function main() {
     } else {
 
         //if the current location is >60m beyond the last or the first location is not defined, generate a map
-        if (!isInRange(lastPos, currentPos) || countTime == TIME_INTERVAL) {
+        if (!isInRange(lastPos, currentPos) || countTime === TIME_INTERVAL) {
             //update the current location to the current
             lastPos.lat = currentPos.lat;
             lastPos.lng = currentPos.lng;
@@ -53,6 +63,23 @@ function main() {
             initMap();
         }
     }
+
+    //alert if accuracy is beyond WAYPOINT_RADIUS
+    if (accuracy > WAYPOINT_RADIUS) {
+        showAlert("Location is within a " + Math.round(accuracy) + "m radius");
+    }
+
+}
+
+function startTimer() {
+    var i = START_TIME;
+    var countdownTimer = setInterval(function () {
+        document.getElementById("output").innerHTML = i + " seconds remaining.";
+        i = i - 1;
+        if (i <= 0) {
+            clearInterval(countdownTimer);
+        }
+    }, 1000);
 }
 
 /**
@@ -65,11 +92,9 @@ function testDevice() {
         console.log("Device GPS active and connected to a network");
     } else {
         /*Throws error on fail no GPS device available*/
-        console.log("Device is not supported or GPS feature is disabled\n" +
-            "Please enable and refresh the page");
         var error = new Error("Device is not supported or GPS feature is disabled\n" +
             "Please enable and refresh the page");
-        error.name = "connectivity";
+        error.name = "No Connectivity";
         throw error;
     }
 }
@@ -80,15 +105,18 @@ function testDevice() {
  * @returns returns the latitude and longitude positions of an object as an array
  */
 function getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(function (data) {
-        currentPos.lat = data.coords.latitude;
-        currentPos.lng = data.coords.longitude;
-        accuracy = data.coords.accuracy;
+    navigator.geolocation.getCurrentPosition(function(posData){
+        currentPos.lat = posData.coords.latitude;
+        currentPos.lng = posData.coords.longitude;
+        accuracy = posData.coords.accuracy;
         //if the programming is starting for the first time, set the last position to the current
         if (countTime < TIME_INTERVAL) {
-            lastPos.lat = data.coords.latitude;
-            lastPos.lng = data.coords.longitude;
+            lastPos.lat = posData.coords.latitude;
+            lastPos.lng = posData.coords.longitude;
         }
+    }, function(){
+
+        errorHandler(new Error("Could not obtain coordinates. Please refresh the page", "No location data"));
     });
 }
 
@@ -132,7 +160,7 @@ function initMap() {
     var mapOptions = {
         zoom: 17,
         center: {lat: lastPos.lat, lng: lastPos.lng}
-    }
+    };
 
     //now insert the map
     var map = new google.maps.Map(mapBox, mapOptions);
@@ -159,16 +187,34 @@ function initMap() {
 
 
 /**
+ * Accepts an error object and opens a modal on the page with the details and instructions
  *
- * @param {*} errorObject
+ * @param {*} errorObject : error object thrown by a function
  */
 function errorHandler(errorObject) {
+
     console.log(errorObject.message);
-    /**
-     *code to create and active modal with the error message
-     */
-    alert(errorObject.name + "\n\n" +
-        errorObject.message);
+    document.getElementById("modalName").innerHTML = errorObject.name;
+    document.getElementById("modalMessage").innerHTML = errorObject.message;
+    $(errorModal).modal('show');
+
+    //countdown and reload after 30 secs
+    var i = TIME_INTERVAL;
+
+    function startTimer() {
+        var countdownTimer = setInterval(function () {
+            document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
+            i = i - 1;
+            if (i <= 0) {
+                clearInterval(countdownTimer);
+            }
+        }, 1000);
+    }
+
+    startTimer();
+    setTimeout(function () {
+        window.location.reload(true);
+    }, TIME_INTERVAL * 1000);
 }
 
 
@@ -217,5 +263,17 @@ function isInRange(pos1, pos2) {
  * @param pos2
  */
 function isEqual(pos1, pos2) {
-    return pos1.lat == pos2.lat && pos1.lng == pos2.lng;
+    return pos1.lat === pos2.lat && pos1.lng === pos2.lng;
+}
+
+/**
+ * Checks device for working internet connection(incomplete)
+ */
+function testConnection() {
+    var url = 'https://www.google.ca/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
+}
+
+function showAlert(message) {
+    alertHTML = '<div id="warning" class="alert alert-warning" role="alert"> <strong>Warning!</strong> ' + message + '</div>';
+    $(alertBox).html(alertHTML);
 }

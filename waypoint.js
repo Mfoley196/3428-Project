@@ -33,10 +33,10 @@ var waypointsArr = [
     },
     {
         name: "My house",
-        url: "http://smu.ca/campus-life/smufit-homburg-centre.html",
+        url: "http://smu.ca/",
         coords: {
             lat: 44.647917299999996,
-            lng: -63.6013177
+            lng: -63.5886686
         }
     }
 ];
