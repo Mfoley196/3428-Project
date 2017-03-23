@@ -2,7 +2,7 @@
  * designed to allow for further extension (see what I did there) and as much code re-use as possible*/
 
 /*Globals*/
-var WAYPOINT_RADIUS = 60;//60m radius
+var WAYPOINT_RADIUS = 30;//60m radius
 var START_TIME = 10; //10 seconds
 var TIME_INTERVAL = 30; //30 seconds interval between location refresh
 var countTime = 0;//logs app runtime
@@ -19,6 +19,13 @@ var lastPos = {
     lng: ""
 };//last know coordinates
 
+/**
+ * At on device run, prompts for location to trigger permissions request
+ */
+function prep() {
+    testDevice();
+    getCurrentLocation();
+}
 
 /**
  * Java still lives!!! say hello to the main method
@@ -26,8 +33,6 @@ var lastPos = {
 function main() {
     try {
         testDevice();
-
-
         getCurrentLocation();
         countTime += TIME_INTERVAL;
         report();
@@ -93,6 +98,7 @@ function startTimer() {
  * @returns True if the device supports
  */
 function testDevice() {
+
     if (navigator.geolocation && navigator.onLine) {
         console.log("Device GPS active and connected to a network");
         getCurrentLocation();
@@ -206,20 +212,26 @@ function errorHandler(errorObject) {
     //countdown and reload after 30 secs
     var i = TIME_INTERVAL;
 
-    function startTimer() {
-        var countdownTimer = setInterval(function () {
-            document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
-            i = i - 1;
-            if (i <= 0) {
-                clearInterval(countdownTimer);
-            }
-        }, 1000);
+    if(errorObject.name == "Request Location Access"){
+        //this is an expected error. No throwing needed
+    }else {
+        function startTimer() {
+            var countdownTimer = setInterval(function () {
+                document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
+                i = i - 1;
+                if (i <= 0) {
+                    clearInterval(countdownTimer);
+                }
+            }, 1000);
+        }
+
+        startTimer();
+        setTimeout(function () {
+            window.location.reload(true);
+        }, TIME_INTERVAL * 1000);
     }
 
-    startTimer();
-    setTimeout(function () {
-        window.location.reload(true);
-    }, TIME_INTERVAL * 1000);
+
 }
 
 
@@ -272,12 +284,9 @@ function isEqual(pos1, pos2) {
 }
 
 /**
- * Checks device for working internet connection(incomplete)
+ *
+ * @param message
  */
-function testConnection() {
-    var url = 'https://www.google.ca/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
-}
-
 function showAlert(message) {
     alertHTML = '<div id="warning" class="alert alert-warning" role="alert"> <strong>Warning!</strong> ' + message + '</div>';
     $(alertBox).html(alertHTML);

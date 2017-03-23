@@ -7,7 +7,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-
     <!--External CSS import-->
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <!--bootstrap 4 v 4.0.0-->
@@ -31,13 +30,11 @@
     <li class="fa fa-times-circle fa-4x exit" aria-hidden="true"></li>
 </ul>
 
-
 <div id="main" style="width: 100%; height: 100%">
     <div id="siteLoader">
         <header class="text-center">
-            <h1>Getting things together...</h1>
-            <!-- The h2 tag had to be outside of main div-->
-            <h2 id="output" class="h1"></h2>
+            <h1 class="h1">Getting things together...</h1>
+
             <!-- pinwheel in html side-->
             <div class="main-container">
                 <div id="pinwheel-container">
@@ -61,6 +58,8 @@
                     </div>
                 </div>
             </div>
+            <!-- The h2 tag had to be outside of main div-->
+            <h2 id="output" class="h2"></h2>
             <div class="pinwheel-stick"></div>
         </header>
     </div>
@@ -84,12 +83,44 @@
     </div>
 </div>
 
+<div class="modal" id="myHelp">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">User Guide</h5>
+            </div>
+            <div class="modal-body">
+
+
+                <h6 style="display: block">Key</h6>
+                <dl>
+                    <dd><img src="icon.png"></dd>
+                    <dt>Predefined locations on map</dt>
+                    <dd><i class="fa fa-question-circle fa-2x"></i></dd>
+                    <dt>Click for help</dt>
+                    <dd><i class="fa fa-times-circle fa-2x"></i></dd>
+                    <dt>Close/Exit the application</dt>
+                    <dd><img src="Marker-48.png"></dd>
+                    <dt>Current location. <span
+                            style="color: tomato; font-weight: bold">NB: May not be 100% accurate</span>
+                    </dt>
+                </dl>
+
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
 
 <div id="alertBox">
 
 
 </div>
-
 
 <script src="./js/functions.js"></script>
 <script src="./js/scripts.js"></script>
