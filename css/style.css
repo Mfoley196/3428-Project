@@ -1,7 +1,7 @@
 /* Pinwheel animation css below*/
 /* Credits to Linda Hurd for the pinwheel, this was opensource and i edited it a bit */
 html, body {
-    background-color: white;
+    background: url(../bg-5-full.jpg) white;
     margin: 0;
     padding: 0;
     height: auto;

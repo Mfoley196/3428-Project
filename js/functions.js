@@ -218,9 +218,9 @@ function errorHandler(errorObject) {
     //countdown and reload after 30 secs
     var i = TIME_INTERVAL;
 
-    if(errorObject.name == "Request Location Access"){
+    if (errorObject.name == "Request Location Access") {
         //this is an expected error. No throwing needed
-    }else {
+    } else {
         function startTimer() {
             var countdownTimer = setInterval(function () {
                 document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
@@ -248,7 +248,7 @@ function errorHandler(errorObject) {
  Params:
  cPos - an object with lat and lng fields
  lPos - an object with lat and lng field
- 
+
  Returns: the distance, in metres, between cPos and lPos
  */
 function getDistance(cPos, lPos) {

@@ -5,24 +5,30 @@ $(document).ready(function () { //wait for all documents to fully load
     prep();
 
     //checks if the location tracking has been enabled for the page in the browser
-    navigator.permissions.query({name: "geolocation"}).then(function (permit) {
-        if (permit.state == 'denied') {
+    navigator.permissions.query({'name':'geolocation'}).then(function (result) {
+
+        // console.log("This is my geolocation permission state: " + result.state);
+
+        if (result.state === 'denied') {
             var error = new Error("Location could not be generated because you have it blocked. Please allow location" +
                 "tracking in your browser to use the program");
             error.name = "Location Access Denied";
             // if the request has been denied then throw error and notify user
             errorHandler(error);
-        } else if (permit.state == 'prompt') {
-            var error = new Error("Please grant permissions for location tracking in your browser");
-            error.name = "Request Location Access";
-            //if the permission is still in "prompt" status, throw error and restart after 30 seconds
-            errorHandler(error);
-            setTimeout(function () {
-                location.reload();
-            }, TIME_INTERVAL * 1000); //reload after 30 seconds
+        }
+    });
+        // else if (result.state === 'prompt') {
+        //     var error = new Error("Please grant permissions for location tracking in your browser");
+        //     error.name = "Request Location Access";
+        //     //if the permission is still in "prompt" status, throw error and restart after 30 seconds
+        //     errorHandler(error);
+        //     setTimeout(function () {
+        //         location.reload();
+        //     }, TIME_INTERVAL * 1000); //reload after 30 seconds
 
-        } else if (permit.state == 'granted') {
+        // } else if (result.state === 'granted') {
 
+            prep();
             // if location tracking privileges are granted, run the main program
             try {
                 testDevice();
@@ -36,8 +42,8 @@ $(document).ready(function () { //wait for all documents to fully load
             } catch (e) {
                 errorHandler(e);
             }
-        }
-    });
+        // }
+    // });
 
 
     /*UI event handlers*/
