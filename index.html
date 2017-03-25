@@ -9,18 +9,17 @@
 
     <!--External CSS import-->
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <!--font-awesome v 4.7.0-->
+    <link rel="stylesheet" href="css/font-awesome.css"/>
     <!--bootstrap 4 v 4.0.0-->
-    <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css"/>
-    <link rel="stylesheet"
-          href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href=""/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
 
     <!--External CDN script imports-->
     <script src="./js/jquery-3.1.1.min.js"></script>
+    <!--bootstrap 4 v 4.0.0-->
     <script src="./js/bootstrap.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAdp3O-uxOmY4vd7k8EfCfcg_cLYooZhOw"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAdp3O-uxOmY4vd7k8EfCfcg_cLYooZhOw"
+    ></script>
 
 </head>
 
@@ -92,19 +91,14 @@
             <div class="modal-body">
 
 
-                <h6 style="display: block">Key</h6>
-                <dl>
-                    <dd><img src="icon.png"></dd>
-                    <dt>Predefined locations on map</dt>
-                    <dd><i class="fa fa-question-circle fa-2x"></i></dd>
-                    <dt>Click for help</dt>
-                    <dd><i class="fa fa-times-circle fa-2x"></i></dd>
-                    <dt>Close/Exit the application</dt>
-                    <dd><img src="Marker-48.png"></dd>
-                    <dt>Current location. <span
-                            style="color: tomato; font-weight: bold">NB: May not be 100% accurate</span>
-                    </dt>
-                </dl>
+                <h6 style="display: block; text-align: center">Key</h6>
+                <ol>
+                    <li><img src="icon.png"> => Predefined locations on map</li>
+                    <li><i class="fa fa-question-circle fa-2x"></i> => Click for help</li>
+                    <li><i class="fa fa-times-circle fa-2x"></i> => Close/Exit the application</li>
+                    <li><img src="Marker-48.png"> => Current location. <span style="color: tomato; font-weight: bold">
+                        NB: May not be 100% accurate</span></li>
+                </ol>
 
 
             </div>
