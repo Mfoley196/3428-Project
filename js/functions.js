@@ -5,6 +5,7 @@
 var WAYPOINT_RADIUS = 30;//60m radius
 var START_TIME = 10; //10 seconds
 var TIME_INTERVAL = 30; //30 seconds interval between location refresh
+var REFRESH_RATE = 5;
 var countTime = 0;//logs app runtime
 var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
 var errorModal = document.getElementById("myModal");
@@ -23,8 +24,15 @@ var lastPos = {
  * At on device run, prompts for location to trigger permissions request
  */
 function prep() {
-    testDevice();
-    getCurrentLocation();
+    try {
+        testDevice();
+        getCurrentLocation();
+    } catch (e) {
+        e.name = "GPS/Network Error";
+        e.message = "Could not connect to a network or GPS device is unavailable. Please check your device and restart" +
+            " the extension";
+        throw e;
+    }
 }
 
 /**
@@ -34,7 +42,7 @@ function main() {
     try {
         testDevice();
         getCurrentLocation();
-        countTime += TIME_INTERVAL;
+        countTime += REFRESH_RATE;
         report();
 
         var index = isPredefined();
@@ -57,7 +65,7 @@ function main() {
         } else {
 
             //if the current location is >60m beyond the last or the first location is not defined, generate a map
-            if (!isInRange(lastPos, currentPos) || countTime === TIME_INTERVAL) {
+            if (!isInRange(lastPos, currentPos) || countTime === REFRESH_RATE) {
                 //update the current location to the current
                 lastPos.lat = currentPos.lat;
                 lastPos.lng = currentPos.lng;
@@ -73,7 +81,7 @@ function main() {
         }
 
     } catch (e) {
-        throw e;
+        errorHandler(e);
     }
 
 }
@@ -105,8 +113,10 @@ function testDevice() {
         getCurrentLocation();
     } else {
         /*Throws error on fail no GPS device available or no wifi*/
-        throw Error("Device is not supported or GPS/Wifi is disabled\n" +
+        var err = new Error("Device is not supported or GPS/Wifi is disabled\n" +
             "Please enable and refresh the page", "No Connectivity");
+        err.name = "Connectivity Error";
+        throw err;
     }
 }
 
@@ -128,8 +138,7 @@ function getCurrentLocation() {
     }, function () {
         //If geolocation API can't get coordinates
         showAlert("Could not generate current coordinates");
-    })
-    // , {enableAccuracy: true});
+    });
 }
 
 /**
@@ -203,25 +212,46 @@ function initMap() {
 
 
 /**
- * Accepts an error object and opens a modal on the page with the details and instructions
+ * Accepts an error object and opens a modal on the page with the details and instructions about the error. It will
+ * handle which action to take based on teh kind of error.
  *
- * @param {*} errorObject : error object thrown by a function
+ * @param {*} error : error object thrown by a function
  */
-function errorHandler(errorObject) {
+function errorHandler(error) {
 
-    console.log(errorObject.message);
-    document.getElementById("modalName").innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true" style="color: red;"></i>' +
-        '  ' + errorObject.name;
-    document.getElementById("modalMessage").innerHTML = errorObject.message;
+    console.log(error.message);
+    document.getElementById("modalName").innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true" ' +
+        'style="color: red;"></i>  ' + error.name;
+    document.getElementById("modalMessage").innerHTML = error.message;
     $(errorModal).modal('show');
 
+    console.log(error.name);
     //countdown and reload after 30 secs
-    var i = TIME_INTERVAL;
+    var i = REFRESH_RATE;
 
-    if (errorObject.name == "Request Location Access") {
+    if (error.name === "Request Location Access") {
         //this is an expected error. No throwing needed
+    } else if (error.name === "Location Access Denied" || error.name === "GPS/Network Error") {//do this if location is blocked
+
+        function selfDestruct() {
+            var countdownTimer = setInterval(function () {
+                document.getElementById("reloadApp").innerHTML = "Exiting in " + i;
+                i = i - 1;
+                if (i <= 0) {
+                    clearInterval(countdownTimer);
+                }
+            }, 1000);
+        }
+
+        selfDestruct();
+
+        setTimeout(function () {
+            window.close();
+        }, REFRESH_RATE * 1000);
+
     } else {
-        function startTimer() {
+
+        function reloadTimer() {
             var countdownTimer = setInterval(function () {
                 document.getElementById("reloadApp").innerHTML = "Reloading in " + i;
                 i = i - 1;
@@ -231,10 +261,10 @@ function errorHandler(errorObject) {
             }, 1000);
         }
 
-        startTimer();
+        reloadTimer();
         setTimeout(function () {
             window.location.reload(true);
-        }, TIME_INTERVAL * 1000);
+        }, REFRESH_RATE * 1000);
     }
 
 
