@@ -80,6 +80,7 @@ function main() {
 
 /**
  * Start page countdown timer
+ * Counts down from START_TIME to 1
  */
 function startTimer() {
     var i = START_TIME;
@@ -112,7 +113,7 @@ function testDevice() {
 /**
  * Function creates a navigator.geolocation object and obtains the devices location using HTML5/Javascript navigator API
  * Also reports the accuracy of the location given
- * @returns returns the latitude and longitude positions of an object as an array
+ * @returns the latitude and longitude positions of an object as an array
  */
 function getCurrentLocation() {
     navigator.geolocation.getCurrentPosition(function (posData) {
@@ -125,19 +126,21 @@ function getCurrentLocation() {
             lastPos.lng = posData.coords.longitude;
         }
     }, function () {
+        //If geolocation API can't get coordinates
         showAlert("Could not generate current coordinates");
     })
     // , {enableAccuracy: true});
 }
 
 /**
- *
+ * Checks if user's current location is in radius of any waypoint
  * @returns return >= 0 if current location is a waypoint, -1 otherwise
  */
 function isPredefined() {
     var shortestDistance = WAYPOINT_RADIUS;//if waypoints overlap, this will hold value of the closest
-    var index = -1; //set default to non of the waypoints
+    var index = -1; //set default to none of the waypoints
 
+    //Loop through all waypoints in array
     for (var i = 0; i < waypointsArr.length; i++) {
         //If the current location is within range of a waypoint
         if (isInRange(waypointsArr[i].coords, currentPos)) {
@@ -145,6 +148,7 @@ function isPredefined() {
             index = i;
         }
     }
+    //Return index of the waypoint - else, return -1
     return index;
 }
 
@@ -160,7 +164,9 @@ function report() {
 }
 
 /**
- * create new google maps object and inserts into the page. Centered on the last known position
+ * Create new google maps object and inserts into the page. Centered on the last known position.
+ * Map displays marker for user's position
+ * Map displays markers for each waypoint in the array
  */
 function initMap() {
     $(siteLoader).html("<div id='mapBox'></div>");//create map container
@@ -175,7 +181,7 @@ function initMap() {
     //now insert the map
     var map = new google.maps.Map(mapBox, mapOptions);
 
-    //create a marker for the object
+    //create a marker for user's position
     var marker = new google.maps.Marker({
         position: lastPos,
         map: map
@@ -241,13 +247,8 @@ function errorHandler(errorObject) {
 
  Params:
  cPos - an object with lat and lng fields
- lPos - an object with lat and lng fields
-
- Pre-conditions: cPos and lPos must be objects with lat and lng fields.
- These fields must be valid latitude and longitude values.
-
- Post-conditions: the distance between cPos and lPos is returned
-
+ lPos - an object with lat and lng field
+ 
  Returns: the distance, in metres, between cPos and lPos
  */
 function getDistance(cPos, lPos) {
@@ -264,7 +265,8 @@ function getDistance(cPos, lPos) {
 }
 
 /**
- *
+ * Calculates if the distance between pos1 and pos2 is less than WAYPOINT_RADIUS
+ * Uses getDistance function
  * @param pos1: reference point. {lat: lng: } object
  * @param pos2: new location {lat: lng: } object
  * @returns {boolean} true if pos2 is within 60m of pos1
@@ -276,16 +278,17 @@ function isInRange(pos1, pos2) {
 /**
  * Compares two coordinates to see if they are the same. Different from isInRange which checks whether the second position
  * is within 60m of the other
- * @param pos1
- * @param pos2
+ * @param pos1 - {lat: lng: } object
+ * @param pos2 - {lat: lng: } object
+ * @returns {boolean} true if both position objects have the same lat and lng values
  */
 function isEqual(pos1, pos2) {
     return pos1.lat === pos2.lat && pos1.lng === pos2.lng;
 }
 
 /**
- *
- * @param message
+ * Function for displaying error messages
+ * @param message - string with error message
  */
 function showAlert(message) {
     alertHTML = '<div id="warning" class="alert alert-warning" role="alert"> <strong>Warning!</strong> ' + message + '</div>';
