@@ -3,7 +3,7 @@
 
 /*Globals*/
 var WAYPOINT_RADIUS = 30;//60m radius
-var START_TIME = 10; //10 seconds
+var START_TIME = 10; //103seconds
 var TIME_INTERVAL = 30; //30 seconds interval between location refresh
 var REFRESH_RATE = 5;
 var countTime = 0;//logs app runtime
@@ -49,7 +49,7 @@ function main() {
         console.log("Index: " + index);
         if (index >= 0) {
 
-            //load a page only if we've moved from a pervious waypoint to another   position: static;
+            //load a page only if we've moved from a previous waypoint to another   position: static;
             if (!isEqual(waypointsArr[index].coords, lastPos)) {
                 lastPos.lat = waypointsArr[index].coords.lat;
                 lastPos.lng = waypointsArr[index].coords.lng;
@@ -64,7 +64,7 @@ function main() {
 
         } else {
 
-            //if the current location is >60m beyond the last or the first location is not defined, generate a map
+            //if the current location is >30m beyond the last or the first location is not defined, generate a map
             if (!isInRange(lastPos, currentPos) || countTime === REFRESH_RATE) {
                 //update the current location to the current
                 lastPos.lat = currentPos.lat;
@@ -123,7 +123,8 @@ function testDevice() {
 /**
  * Function creates a navigator.geolocation object and obtains the devices location using HTML5/Javascript navigator API
  * Also reports the accuracy of the location given
- * @returns the latitude and longitude positions of an object as an array
+ * @returns lat and lng fields of the currentPos variable, the accuracy of the coordinates, or an error if the API
+ *          can't generate coordinates
  */
 function getCurrentLocation() {
     navigator.geolocation.getCurrentPosition(function (posData) {
@@ -210,7 +211,6 @@ function initMap() {
     }
 }
 
-
 /**
  * Accepts an error object and opens a modal on the page with the details and instructions about the error. It will
  * handle which action to take based on teh kind of error.
@@ -270,16 +270,14 @@ function errorHandler(error) {
 
 }
 
-
 /**
- Finds distance between two points, using the google geometry library
- If lPos is not initialized, cPos will be used in its place.
-
- Params:
- cPos - an object with lat and lng fields
- lPos - an object with lat and lng field
-
- Returns: the distance, in metres, between cPos and lPos
+ * Finds distance between two points, using the google geometry library
+ * If lPos is not initialized, cPos will be used in its place.
+ *
+ * @param cPos - an object with lat and lng fields
+ * @param lPos - an object with lat and lng field
+ *
+ * @returns {float} the distance, in metres, between cPos and lPos
  */
 function getDistance(cPos, lPos) {
     //Convert cPos to a LatLng object
