@@ -1,40 +1,15 @@
 /* Pinwheel animation css below*/
 /* Credits to Linda Hurd for the pinwheel, this was opensource and i edited it a bit */
 html, body {
-    /*background-image: url(./bg-5-full.jpg);*/
-    background-color: #5bc0de;
+    background: url(../bg-5-full.jpg) white;
     margin: 0;
     padding: 0;
-    max-height: 100% ;
+    height: auto;
     width: 100%;
 }
 
-#siteLoader {
-    position: relative;
-    padding-bottom: 75%;
-/ / This is the aspect ratio height: 0;
-    overflow: hidden;
-}
-
-#mapBox {
-    border: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-
-}
-
-#main-container {
-    position: absolute;
-    top: 50%;
-}
-
-
 /*Header styles */
 h1 {
-    font-size: 2em;
     font-family: arial, helvetica, sans-serif;
     color: grey;
     margin: 0;
@@ -44,74 +19,82 @@ h1 {
 }
 
 h2 {
-    font-size: 2em;
     font-family: arial, helvetica, sans-serif;
     color: grey;
     margin: 0;
     position: absolute;
-    top: 64%;
+    top: 60%;
     left: 37%;
 }
 
-
 #siteLoader {
-    position: relative;
-    padding-bottom: 75%;
-// This is the aspect ratio height: 0;
+    position: static;
+    display: block;
+    width: 100%;
+    height: 100%;
+    /*padding-bottom: 75%;*/
+    /*/ / This is the aspect ratio height: 0;*/
     overflow: hidden;
+    text-align: center;
 }
 
-#mapBox {
+#mapBox, #siteBox {
     border: 0;
     position: absolute;
     top: 0;
     left: 0;
     width: 100% !important;
     height: 100% !important;
-
+    z-index: -1;
 }
 
 #main-container {
     position: absolute;
-    top: 50%;
+    top: 55%;
 }
 
 #warning {
     text-align: center;
 }
 
-.exit {
-    display: flex;
-    position: relative;
+#ui-buttons {
+    display: inline-block;
+!important;
     float: right;
-    color: #00B2A6;
+!important;
+    position: fixed;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    right: 0;
 }
+
+#ui-buttons li, #ui-buttons li:hover {
+    cursor: pointer;
+    border-radius: 50%;
+    margin: 0 5px;
+    padding: 0;
+}
+
 .exit:hover {
-    cursor: hand;
-    color: red;
+    color: #ea4335;
 }
 
-/*Header styles */
-h1 {
-    font-size: 2em;
-    font-family: arial, helvetica;
-    color: grey;
-    margin: 0;
-    position: absolute;
-    top: 20%;
-    left: 30%;
+.help:hover {
+    color: #4285f4;
 }
 
-h2 {
-    font-size: 2em;
-    font-family: arial, helvetica;
-    color: grey;
-    margin: 0;
-    position: absolute;
-    top: 64%;
-    left: 37%;
+#myHelp img {
+    height: 25px;
+    width: 25px;
 }
 
+#guideCarousel a, #guideCarousel ol {
+    color: #4285f4;
+}
+
+
+/*pinwheel animation*/
 .main-container {
     left: 46.4%;
     top: 25%;
@@ -119,49 +102,10 @@ h2 {
     height: 100px;
     margin: 30px auto;
     position: absolute;
-    -webkit-animation-name: spin;
-    -webkit-animation-duration: 1500ms;
-    -webkit-animation-iteration-count: infinite;
-    -webkit-animation-timing-function: linear;
-    -moz-animation-name: spin;
-    -moz-animation-duration: 1500ms;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-timing-function: linear;
-    -ms-animation-name: spin;
-    -ms-animation-duration: 1500ms;
-    -ms-animation-iteration-count: infinite;
-    -ms-animation-timing-function: linear;
     animation-name: spin;
     animation-duration: 1500ms;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
-}
-
-@-ms-keyframes spin {
-    from {
-        -ms-transform: rotate(0deg);
-    }
-    to {
-        -ms-transform: rotate(-360deg);
-    }
-}
-
-@-moz-keyframes spin {
-    from {
-        -moz-transform: rotate(0deg);
-    }
-    to {
-        -moz-transform: rotate(-360deg);
-    }
-}
-
-@-webkit-keyframes spin {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    to {
-        -webkit-transform: rotate(-360deg);
-    }
 }
 
 @keyframes spin {
@@ -178,42 +122,42 @@ h2 {
     height: 0;
     border-top: 0px solid transparent;
     border-bottom: 30px solid transparent;
-    border-left: 30px solid #7a7678;
+    border-left: 30px solid white;
     position: absolute;
     left: 50px;
     top: 20px;
 }
 
 #pin-2 .pin-big-triangle {
-    border-bottom: 30px solid #FF6619;
+    border-bottom: 30px solid #ea4335;
 }
 
 #pin-2 .pin-base {
-    border-left: 30px solid #ff935d;
+    border-left: 30px solid #ea4335;
 }
 
 #pin-3 .pin-big-triangle {
-    border-bottom: 30px solid #00B2A6;
+    border-bottom: 30px solid #34a853;
 }
 
 #pin-3 .pin-base {
-    border-left: 30px solid #6dd2cb;
+    border-left: 30px solid #34a853;
 }
 
 #pin-1 .pin-big-triangle {
-    border-bottom: 30px solid #14CC57;
+    border-bottom: 30px solid #fbbc05;
 }
 
 #pin-1 .pin-base {
-    border-left: 30px solid #70cc92;
+    border-left: 30px solid #fbbc05;
 }
 
 #pin-4 .pin-big-triangle {
-    border-bottom: 30px solid #808485;
+    border-bottom: 30px solid #4285f4;
 }
 
 #pin-4 .pin-base {
-    border-left: 30px solid #acb1b2;
+    border-left: 30px solid #4285f4;
 }
 
 .pin-big-triangle {
@@ -237,32 +181,24 @@ h2 {
     left: 50px;
     top: 50px;
     transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
 }
 
 #pin-3 {
     top: 98px;
     left: 2px;
     transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
 }
 
 #pin-4 {
     left: -50px;
     top: 49px;
     transform: rotate(-90deg);
-    -ms-transform: rotate(-90deg);
-    -webkit-transform: rotate(-90deg);
 }
 
 .pinwheel-center-circle {
     background-color: #FFA40D;
     width: 7px;
     height: 7px;
-    -webkit-border-radius: 127px;
-    -moz-border-radius: 127px;
     border-radius: 127px;
     position: absolute;
     top: 47px;
