@@ -77,7 +77,7 @@ function main() {
 
         //alert if accuracy is beyond WAYPOINT_RADIUS
         if (accuracy > WAYPOINT_RADIUS) {
-            showAlert("Location is within a " + Math.round(accuracy) + "m radius");
+            showAlert("Accuracy is within a " + Math.round(accuracy) + "m radius");
         }
 
     } catch (e) {
