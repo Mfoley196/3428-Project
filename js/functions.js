@@ -2,23 +2,39 @@
  * designed to allow for further extension (see what I did there) and as much code re-use as possible*/
 
 /*Globals*/
-var WAYPOINT_RADIUS = 30;//60m radius
-var START_TIME = 10; //103seconds
-var TIME_INTERVAL = 30; //30 seconds interval between location refresh
+/*
+The following are constants to be set at the time of development.
+*/
+//The radius of a waypoint in metres.
+var WAYPOINT_RADIUS = 30;
+//The initial value of the countdown timer on the opening screen, in seconds.
+var START_TIME = 10;
+//Timing variable used for handling in getCurrentLocation on startup.
+var TIME_INTERVAL = 30;
+//The number of seconds between location updates.
 var REFRESH_RATE = 5;
-var countTime = 0;//logs app runtime
-var siteLoader = document.getElementById("siteLoader");//html object to hold generated content on page
+
+/*
+The following are variables that allow interfacing across multiple functions.
+*/
+//The number of seconds the app has been running.
+var countTime = 0;
+//HTML objects to hold generated content on the page.
+var siteLoader = document.getElementById("siteLoader");
 var errorModal = document.getElementById("myModal");
 var alertBox = document.getElementById("alertBox");
+//The accuracy of the coordinates provided by the GPS in metres.
 var accuracy;
+//The devices's current location as a LatLgn object.
 var currentPos = {
     lat: "",
     lng: ""
-};//device's current location as a LatLgn object. Updates every 30secs
+};
+//The coordinates from the next to last update.
 var lastPos = {
     lat: "",
     lng: ""
-};//last know coordinates
+};
 
 /**
  * At on device run, prompts for location to trigger permissions request
