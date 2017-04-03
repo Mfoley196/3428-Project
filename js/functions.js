@@ -38,6 +38,11 @@ var lastPos = {
 
 /**
  * At on device run, prompts for location to trigger permissions request
+ *
+ * Pre-Conditions: Program needs to be running on a laptop, or other PC
+ *
+ * Post-Conditions: User is requested to allow/block locations permissions. testDevice() and getCurrentLocation() are run
+ *                  If either function throws an error, the error is caught here, and re-thrown
  */
 function prep() {
     try {
@@ -53,9 +58,6 @@ function prep() {
 
 /**
  * Java still lives!!! say hello to the main method
- *
- *
- *
  */
 function main() {
     try {
@@ -108,6 +110,10 @@ function main() {
 /**
  * Start page countdown timer
  * Counts down from START_TIME to 1
+ *
+ * Pre-Conditions: START_TIME must be initialized
+ *
+ * Post-Conditions: A countdown timer from START_TIME to 1 has been displayed on the start page
  */
 function startTimer() {
     var i = START_TIME;
@@ -123,6 +129,12 @@ function startTimer() {
 /**
  * Tests if the device supports GPS or if it's active and also tests for an active connection
  * Throws noConnectivity error when coordinates cannot be found or no network connection available
+ *
+ * Pre-Conditions: Code must be running on a laptop, or other PC
+ *
+ * Post-Conditions: If device supports GPS, success message is displayed to console, and user's location is fetched.
+ *                  Otherwise, an error is thrown.
+ *
  * @returns True if the device supports
  */
 function testDevice() {
