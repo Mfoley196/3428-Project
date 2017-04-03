@@ -12,6 +12,9 @@ Alternatively, the project is hosted at locations.github.io
 Important Files:
 
 js/functions.js - has all the functions used in the code
+
 js/scripts.js - Main program runtime
+
 waypoints.js - JS file containing JSON object with all our waypoints
+
 index.html - Main html page for project
