@@ -37,6 +37,9 @@ function prep() {
 
 /**
  * Java still lives!!! say hello to the main method
+ *
+ *
+ *
  */
 function main() {
     try {
@@ -123,6 +126,12 @@ function testDevice() {
 /**
  * Function creates a navigator.geolocation object and obtains the devices location using HTML5/Javascript navigator API
  * Also reports the accuracy of the location given
+ *
+ * Pre-Conditions: TIME_INTERVAL must be initialized. User must have granted the program location access
+ *
+ * Post-Conditions: currentPos is set to the user's current position. accuracy is set. If the program is starting, lastPos is
+ *                  set to currentPos.
+ *
  * @returns lat and lng fields of the currentPos variable, the accuracy of the coordinates, or an error if the API
  *          can't generate coordinates
  */
@@ -144,6 +153,12 @@ function getCurrentLocation() {
 
 /**
  * Checks if user's current location is in radius of any waypoint
+ *
+ * Pre-Conditions: WAYPOINT_RADIUS must be initialized. waypoints must be initialized.
+ *
+ * Post-Conditions: If the user is in radius of a waypoint, the index of that waypoint is returned, otherwise -1 is returned.
+ *                  If currentPos is null, the index of the last waypoint in the array is returned.
+ * 
  * @returns return >= 0 if current location is a waypoint, -1 otherwise
  */
 function isPredefined() {
@@ -177,6 +192,11 @@ function report() {
  * Create new google maps object and inserts into the page. Centered on the last known position.
  * Map displays marker for user's position
  * Map displays markers for each waypoint in the array
+ *
+ * Pre-Conditions: waypoints must be initialized. The program must have location access to the user's device
+ *
+ * Post-Conditions: A map object is displayed on screen, with markers drawn for the user's last location, and the waypoints.
+ *
  */
 function initMap() {
     $(siteLoader).html("<div id='mapBox'></div>");//create map container
@@ -215,6 +235,11 @@ function initMap() {
  * Accepts an error object and opens a modal on the page with the details and instructions about the error. It will
  * handle which action to take based on teh kind of error.
  *
+ * Pre-Conditions: error must be initialized. REFRESH_RATE must be initialized.
+ *
+ * Post-Conditions: The error is displayed on screen. If a Location Access error has occured, the program will exit after 5 seconds.
+ *                  Otherwise, the app will refresh in 5 seconds.
+ *
  * @param {*} error : error object thrown by a function
  */
 function errorHandler(error) {
@@ -226,7 +251,7 @@ function errorHandler(error) {
     $(errorModal).modal('show');
 
     console.log(error.name);
-    //countdown and reload after 30 secs
+    //countdown and reload after 5 secs
     var i = REFRESH_RATE;
 
     if (error.name === "Request Location Access") {
@@ -274,6 +299,10 @@ function errorHandler(error) {
  * Finds distance between two points, using the google geometry library
  * If lPos is not initialized, cPos will be used in its place.
  *
+ * Pre-Conditions: cPos must be initialized. The Google Maps Geometry API must be imported.
+ *
+ * Post-Conditions: The spherical distance between cPos and lPos is returned
+ *
  * @param cPos - an object with lat and lng fields
  * @param lPos - an object with lat and lng field
  *
@@ -295,6 +324,12 @@ function getDistance(cPos, lPos) {
 /**
  * Calculates if the distance between pos1 and pos2 is less than WAYPOINT_RADIUS
  * Uses getDistance function
+ *
+ * Pre-Conditions: pos1 and pos2 must be initialized. WAYPOINT_RADIUS must be initialized.
+ *
+ * Post-Conditions: Returns True or False depending on whether the distance between pos1
+ *                  & pos2 is less than WAYPOINT_RADIUS
+ *
  * @param pos1: reference point. {lat: lng: } object
  * @param pos2: new location {lat: lng: } object
  * @returns {boolean} true if pos2 is within 60m of pos1
@@ -306,6 +341,11 @@ function isInRange(pos1, pos2) {
 /**
  * Compares two coordinates to see if they are the same. Different from isInRange which checks whether the second position
  * is within 60m of the other
+ *
+ * Pre-Conditions: pos1 and pos2 must be initialized
+ *
+ * Post-Conditions: Returns True or False depending on if pos1 and pos2 are equal.
+ *
  * @param pos1 - {lat: lng: } object
  * @param pos2 - {lat: lng: } object
  * @returns {boolean} true if both position objects have the same lat and lng values
@@ -316,6 +356,11 @@ function isEqual(pos1, pos2) {
 
 /**
  * Function for displaying error messages
+ *
+ * Pre-Conditions - message must be initialized
+ *
+ * Post-Conditions - An error message using the "message" parameter is displayed on the screen.
+ *
  * @param message - string with error message
  */
 function showAlert(message) {
