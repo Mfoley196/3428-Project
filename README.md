@@ -18,3 +18,5 @@ js/scripts.js - Main program runtime
 waypoints.js - JS file containing JSON object with all our waypoints
 
 index.html - Main html page for project
+
+See it live [here](https://locations.github.io/)
